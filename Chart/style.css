@@ -1,11 +1,11 @@
-body{
+body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: skyblue;
     margin: 0;
 }
 
-table,td{
-    border : 2px solid lightgray;
+table, td {
+    border: 2px solid lightgray;
     padding: 10px;
     text-align: center;
     border-collapse: collapse;
@@ -15,9 +15,13 @@ thead {
     font-weight: bold;
 }
 
-#chartContainer{
+#chartContainer {
     position: fixed;
     right: 0;
     top: 40%;
-    transform: translate(-40%, -60%);
+    transform: translate(-40%, -40%);
+}
+
+.emphasize {
+    background-color: yellow;
 }

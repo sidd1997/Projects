@@ -1,5 +1,5 @@
-class SketchPad{
-    constructor(container , size = 400){
+class SketchPad {
+    constructor(container, size = 400) {
         this.canvas = document.createElement("canvas");
         this.canvas.width = size;
         this.canvas.height = size;
@@ -25,13 +25,13 @@ class SketchPad{
         this.#addEventListeners();
     }
 
-    reset(){
+    reset() {
         this.paths = [];
         this.isDrawing = false;
         this.#redraw();
     }
 
-    #addEventListeners(){
+    #addEventListeners() {
         this.canvas.onmousedown = (evt) => {
             const rect = this.canvas.getBoundingClientRect();
             const mouse = this.#getMouse(evt);
@@ -40,9 +40,9 @@ class SketchPad{
             this.isDrawing = true;
         }
         this.canvas.onmousemove = (evt) => {
-            if(this.isDrawing){
+            if (this.isDrawing) {
                 const mouse = this.#getMouse(evt);
-                const lastPath = this.paths[this.paths.length -1];
+                const lastPath = this.paths[this.paths.length - 1];
                 lastPath.push(mouse);
                 //console.log(this.path.length);
                 this.#redraw()
@@ -71,14 +71,14 @@ class SketchPad{
         }
     }
 
-    #redraw(){
-        this.ctx.clearRect(0, 0, this.canvas.width ,this.canvas.height);
-        draw.paths(this.ctx,this.paths);
-        if(this.paths.length > 0){
+    #redraw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        draw.paths(this.ctx, this.paths);
+        if (this.paths.length > 0) {
             this.undoButton.disabled = false;
             this.reDrawButton.disabled = false;
         }
-        else{
+        else {
             this.undoButton.disabled = true;
             this.reDrawButton.disabled = true;
         }
@@ -87,8 +87,8 @@ class SketchPad{
     #getMouse = (evt) => {
         const rect = this.canvas.getBoundingClientRect();
         return [
-                Math.round(evt.clientX-rect.left),
-                Math.round(evt.clientY-rect.top)
-            ];
+            Math.round(evt.clientX - rect.left),
+            Math.round(evt.clientY - rect.top)
+        ];
     }
 }

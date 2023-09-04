@@ -3,14 +3,14 @@ const utils = {};
 utils.flaggedUsers = [1663882102141, 1663900040545, 1664485938220];
 
 utils.style = {
-    car:'gray',
-    fish:'red',
-    house:'yellow',
-    tree:'green',
-    bicycle:'cyan',
-    guiter:'blue',
-    pencil:'magenta',
-    clock:'lightgray',
+    car: 'gray',
+    fish: 'red',
+    house: 'yellow',
+    tree: 'green',
+    bicycle: 'cyan',
+    guiter: 'blue',
+    pencil: 'magenta',
+    clock: 'lightgray',
 };
 
 utils.formatPercent = (n) => {
@@ -20,15 +20,15 @@ utils.formatPercent = (n) => {
 utils.printProgress = (count, max) => {
     process.stdout.clearLine();
     process.stdout.cursorTo(0);
-    const percent = utils.formatPercent(count/max);
+    const percent = utils.formatPercent(count / max);
     process.stdout.write(count + "/" + max + "(" + percent + ")");
 }
 
 utils.groupBy = (objArray, key) => {
     const groups = {};
-    for(let obj of objArray){
+    for (let obj of objArray) {
         const val = obj[key];
-        if(groups[val] == null){
+        if (groups[val] == null) {
             groups[val] = [];
         }
         groups[val].push(obj);
@@ -36,6 +36,6 @@ utils.groupBy = (objArray, key) => {
     return groups;
 }
 
-if(typeof module !== "undefined"){
+if (typeof module !== "undefined") {
     module.exports = utils;
 }
