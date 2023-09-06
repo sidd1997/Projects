@@ -1,5 +1,5 @@
 class SketchPad {
-    constructor(container, size = 400) {
+    constructor(container, onUpdate = null, size = 400) {
         this.canvas = document.createElement("canvas");
         this.canvas.width = size;
         this.canvas.height = size;
@@ -20,12 +20,14 @@ class SketchPad {
         this.reDrawButton.disabled = true;
         container.appendChild(this.reDrawButton);
         this.ctx = this.canvas.getContext("2d");
-        this.paths = [];
-        this.isDrawing = false;
+        //this.paths = [];
+        //this.isDrawing = false;
+        this.onUpdate = onUpdate;
+        this.#reset();
         this.#addEventListeners();
     }
 
-    reset() {
+    #reset() {
         this.paths = [];
         this.isDrawing = false;
         this.#redraw();
@@ -67,7 +69,7 @@ class SketchPad {
             this.#redraw();
         }
         this.reDrawButton.onclick = () => {
-            this.reset()
+            this.#reset()
         }
     }
 
@@ -81,6 +83,13 @@ class SketchPad {
         else {
             this.undoButton.disabled = true;
             this.reDrawButton.disabled = true;
+        }
+        this.triggerUpdate();
+    }
+
+    triggerUpdate() {
+        if (this.onUpdate) {
+            this.onUpdate(this.paths);
         }
     }
 

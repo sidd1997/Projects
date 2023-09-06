@@ -7,18 +7,28 @@
 </head>
 <body>
     <h1>Data Viewer</h1>
+    <div id="inputContainer"></div>
     <div id="chartContainer"></div>
-    <br>
+    <div id="controlPanel">
+        <button onclick="toggleInput()">Toggle Input</button>
+    </div>
+    <!--<br>
     <div id="schartContainer"></div>
-    <br>
+    <br>-->
     <div id="container"></div>
 
     <!--<script src="../common/js_objects/samples.js"></script> -->
     <script src="../common/js_objects/features.js"></script>
     <script src="../common/constants.js"></script>
     <script src="../common/utils.js"></script>
+    <script src="../common/draw.js"></script>
+    <script src="../common/featuresFunctions.js"></script>
     <script src="js/display.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="js/sketchPad.js"></script>
+    <script src="../../Chart/chart.js"></script>
+    <script src="../../Chart/graphics.js"></script>
+    <script src="../../Chart/math.js"></script>
+    <!--<script src="https://www.gstatic.com/charts/loader.js"></script>-->
     <script>
         const { samples, featureNames } = features;
         const groups = utils.groupBy(samples, "student_id");
@@ -30,17 +40,34 @@
         }
 
         const options = {
-            width: 400,
-            height: 400,
-            hAxis: { title: featureNames[0] },
-            vAxis: { title: featureNames[1] },
-            legend: { position: 'none' },
-            explorer: {
-                maxZoomIn: 0.01,
-                actions: ['dragToZoom', 'rightClickToReset']
-            }
+            size: 500,
+            axesLabels: featureNames,
+            styles: utils.styles,
+            transparency: 0.7,
+            icon: "image"
         };
-        google.charts.load('current', { 'packages': ['corechart', 'scatter'] });
+        graphics.generateImages(utils.styles);
+        const chart = new Chart(chartContainer, samples, options, handleClick);
+        const sketchPad = new SketchPad(inputContainer, onDrawingUpdate);
+        sketchPad.canvas.style.cssText += "outline:10000px solid rgba(0,0,0,0.9);";
+
+        function onDrawingUpdate(paths) {
+            const point = [featuresFunctions.getPathCount(paths), featuresFunctions.getPointCount(paths)];
+            chart.showDynamicPoint(point);
+        }
+        /*const options = {
+        width: 400,
+        height: 400,
+        hAxis: { title: featureNames[0] },
+        vAxis: { title: featureNames[1] },
+        legend: { position: 'none' },
+        explorer: {
+        maxZoomIn: 0.01,
+        actions: ['dragToZoom', 'rightClickToReset']
+        }
+        };*/
+
+        /*google.charts.load('current', { 'packages': ['corechart', 'scatter'] });
         google.charts.setOnLoadCallback(() => {
             const data = new google.visualization.DataTable();
             data.addColumn('number', featureNames[0]);
@@ -51,7 +78,7 @@
             chart.draw(data, options);
             const schart = new google.charts.Scatter(schartContainer);
             schart.draw(data, google.charts.Scatter.convertOptions(options));
-        })
+        })*/
     </script>
 </body>
 </html>
