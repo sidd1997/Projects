@@ -29,12 +29,14 @@ class Chart {
         this.dataBounds = this.#getDataBound();
         this.drfaultDataBounds = this.#getDataBound();
         this.dynamicPoint = null;
+        this.nearestSamples = null;
         this.#draw();
         this.#addEventListeners();
     }
 
-    showDynamicPoint(point) {
-        this.dynamicPoint = point;
+    showDynamicPoint(point, label, nearestSamples) {
+        this.dynamicPoint = { point, label };
+        this.nearestSamples = nearestSamples;
         this.#draw();
     }
 
@@ -160,10 +162,13 @@ class Chart {
         const maxX = Math.max(...x);
         const minY = Math.min(...y);
         const maxY = Math.max(...y);
+        const deltaX = maxX - minX;
+        const deltaY = maxY - minY;
+        const maxDelta = Math.max(deltaX, deltaY);
         const bounds = {
             left: minX,
-            right: maxX,
-            top: maxY,
+            right: maxX + maxDelta,
+            top: maxY + maxDelta,
             bottom: minY
         };
         return bounds;
@@ -183,9 +188,19 @@ class Chart {
             this.#emphasizeSample(this.selectedSample, "yellow");
         }
         if (this.dynamicPoint) {
-            const pixelLoc = math.remapPoint(this.dataBounds, this.pixelBounds, this.dynamicPoint);
+            const { point, label } = this.dynamicPoint;
+            const pixelLoc = math.remapPoint(this.dataBounds, this.pixelBounds, point);
             graphics.drawPoint(ctx, pixelLoc, "rgba(255, 255, 255, 0.7)", 100000000);
-            graphics.drawPoint(ctx, pixelLoc, "black");
+            ctx.strokeStyle = "gray";
+            for (const sample of this.nearestSamples) {
+                const point = math.remapPoint(this.dataBounds, this.pixelBounds, sample.point);
+                ctx.beginPath();
+                ctx.moveTo(...pixelLoc);
+                ctx.lineTo(...point);
+                ctx.stroke();
+            }
+            //graphics.drawPoint(ctx, pixelLoc, "black");
+            graphics.drawImage(ctx, this.styles[label].image, pixelLoc);
         }
         this.#drawAxes();
     }
